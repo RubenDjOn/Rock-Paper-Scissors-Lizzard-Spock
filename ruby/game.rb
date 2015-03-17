@@ -1,51 +1,54 @@
-require './player'
+require './round'
 
 class Game
   attr_reader :loser_movements 
-  attr_accessor :user, :computer
+  attr_accessor :player_user, :player_computer, :round
 
-  def initialize()
-  	@user = Player.new('User')
-  	@computer = Player.new('Computer')  	
+  def initialize(user, computer)
+  	@player_user = user
+  	@player_computer = computer
+  	@round = Round.new
+  	@winner
   	@loser_movements = {'Spock' => ['Lizard','Paper'],
   					'Lizard' => ['Rock','Scissors'],
   					'Scissors' => ['Rock','Spock'],
-  					'Paper' => ['Scissors','Lizard'],  					
+  					'Paper' => ['Scissors','Lizard'],
   					'Rock' => ['Paper','Spock']}
+  	@winning_messages = {'User' => 'You Win the Game',
+  						 'Computer'=> 'Computer Wins the Game'}
   end
 
-  def print_winner
-  	winner_messaages = {'User'=>'You Win',
-  						'Computer' => 'You Lost',
-  						'Draw' => 'Draw'}
-  	
-  	winner_message = winner_messaages[who_wins?]
-	if @computer.wins == 3
-		winner_message = 'Computer Wins the Game'
-	elsif @user.wins == 3
-		winner_message = 'You Win the Game'		
-	end
-
-	return winner_message
+  def user_moves(movement)
+  	@player_user.last_movement = movement
+  	@round.user_movement = movement
   end
 
-  private
-  
-  def user_lost?
-  	@loser_movements[@user.movement].include? @computer.movement
+  def computer_moves(movement)
+  	@player_computer.last_movement = movement
+  	@round.computer_movement = movement
   end
 
-  def who_wins?
-	if user_lost?
-		@computer.wins += 1		
-		winner = 'Computer'
-	elsif @user.movement == @computer.movement
-		winner = 'Draw'
-	else		
-		@user.wins += 1	
-		winner = 'User'
-	end
+  def proccess_winner
+  	@round.who_wins?
+  	increase_wins_of_the_winner
+  end
 
-	return winner
+  def print_winning_message  	
+  	message = round.get_winning_message
+  	if @winner
+  		message = @winning_messages[@winner]
+  	end
+  	return message
+  end
+
+  private 
+  def increase_wins_of_the_winner
+  	if @round.winner == 'User'
+  		@player_user.wins += 1
+  		@winner = 'User' if @player_user.is_winner_of_the_game
+  	elsif @round.winner == 'Computer'
+  		@player_computer.wins += 1
+  		@winner = 'Computer' if @player_computer.is_winner_of_the_game
+  	end  		
   end
 end
