@@ -1,19 +1,15 @@
 class Round
 	attr_reader :loser_movements
-	attr_accessor :user_movement, :computer_movement, :winner
+	attr_accessor :winner, :players_movement
 
 	def initialize()		
-		@user_movement
-		@computer_movement
+		@players_movement = {}
 		@winner
 	  	@loser_movements = {'Spock' => ['Lizard','Paper'],
 					'Lizard' => ['Rock','Scissors'],
 					'Scissors' => ['Rock','Spock'],
 					'Paper' => ['Scissors','Lizard'],
 					'Rock' => ['Paper','Spock']}
-		@winning_messaages = {'User'=>'You Win',
-  						'Computer' => 'You Lost',
-  						'Draw' => 'Draw'}
 	end
 
 	def who_wins?
@@ -21,18 +17,15 @@ class Round
 
 		if user_lost?			
 			@winner = 'Computer'
-		elsif @user_movement == @computer_movement
+		elsif @players_movement['User'] == @players_movement['Computer']
 			@winner = 'Draw'
 		end
 
 		return @winner
 	end
 
-	def get_winning_message
-		@winning_messaages[@winner]
-	end
 	private
 	def user_lost?
-		@loser_movements[@user_movement].include? @computer_movement
+		@loser_movements[@players_movement['User']].include? @players_movement['Computer']
 	end
 end

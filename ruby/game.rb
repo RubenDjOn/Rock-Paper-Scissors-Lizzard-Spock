@@ -1,31 +1,18 @@
-require './round'
-
 class Game
-  attr_reader :loser_movements 
+  attr_reader :loser_movements, :printer
   attr_accessor :player_user, :player_computer, :round
 
-  def initialize(user, computer)
+  def initialize(user, computer, round, printer)
   	@player_user = user
   	@player_computer = computer
-  	@round = Round.new
+  	@round = round
+  	@printer = printer
   	@winner
-  	@loser_movements = {'Spock' => ['Lizard','Paper'],
-  					'Lizard' => ['Rock','Scissors'],
-  					'Scissors' => ['Rock','Spock'],
-  					'Paper' => ['Scissors','Lizard'],
-  					'Rock' => ['Paper','Spock']}
-  	@winning_messages = {'User' => 'You Win the Game',
-  						 'Computer'=> 'Computer Wins the Game'}
   end
 
-  def user_moves(movement)
-  	@player_user.last_movement = movement
-  	@round.user_movement = movement
-  end
-
-  def computer_moves(movement)
-  	@player_computer.last_movement = movement
-  	@round.computer_movement = movement
+  def player_moves(player, movement)
+  	player.last_movement = movement
+  	@round.players_movement[player.name] = movement
   end
 
   def proccess_winner
@@ -33,12 +20,8 @@ class Game
   	increase_wins_of_the_winner
   end
 
-  def print_winning_message  	
-  	message = round.get_winning_message
-  	if @winner
-  		message = @winning_messages[@winner]
-  	end
-  	return message
+  def print_winner
+  	@printer.print_winning_message(@round.winner, @winner)
   end
 
   private 

@@ -1,16 +1,18 @@
 Given(/^I have the option to choose a movement$/) do
   require './game'
-  require './player'  
-  @game = Game.new(Player.new('User'), Player.new('Computer'))  
+  require './player'
+  require './round'
+  require './printer'  
+  @game = Game.new(Player.new('User'), Player.new('Computer'), Round.new, Printer.new)  
   @my_movement = ''
 end
 
 When(/^I choose (.*?)$/) do |movement|
-  @game.user_moves(movement)
+  @game.player_moves(@game.player_user, movement)
 end
 
 When(/^Computer choose (.*?)$/) do |movement|
-  @game.computer_moves(movement)
+  @game.player_moves(@game.player_computer, movement)
   #@game.computer.move(movement)
   #@game.move(computer, movement)
 end
@@ -18,7 +20,7 @@ end
 Then(/^I must see the message (.*?)$/) do |message|  
   @game.proccess_winner
   #winner_message = @game.round.print_winner
-  winner_message = @game.print_winning_message
+  winner_message = @game.print_winner
   message.should == winner_message
 end
 
