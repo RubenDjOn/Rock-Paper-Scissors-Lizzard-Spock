@@ -12,14 +12,11 @@ When(/^I choose (.*?)$/) do |movement|
 end
 
 When(/^Computer choose (.*?)$/) do |movement|
-  @game.player_moves(@game.player_computer, movement)
-  #@game.computer.move(movement)
-  #@game.move(computer, movement)
+  @game.player_moves(@game.player_computer, movement)  
 end
 
 Then(/^I must see the message (.*?)$/) do |message|  
-  @game.proccess_winner
-  #winner_message = @game.round.print_winner
+  @game.proccess_winner  
   winner_message = @game.print_winner
   message.should == winner_message
 end

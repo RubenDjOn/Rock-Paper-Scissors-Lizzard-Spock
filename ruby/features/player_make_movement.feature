@@ -1,7 +1,7 @@
 Feature: Player Make Movement
 	In order to play the Game
-	the player select a movement and the game must
-	show who is the winner
+	the player select a movement and the game
+	shows who is the winner
 
 	Scenario Outline: Select Movement
 		Given I have the option to choose a movement
@@ -36,8 +36,8 @@ Feature: Player Make Movement
 			| Rock        | Spock             | You Lost            |
 				
 	Scenario Outline: Win/Lost the Game
-		In order to proclaim a Winner
-		We take into consideration the number of rounds winned by the players
+		In order to proclaim a Winner		
+		We count the number of rounds won by each player 
 
 		Given I have the option to choose a movement
 		And I won <User Wins> rounds before
